@@ -12,7 +12,6 @@
 #include <pigpiod_if2.h>
 
 #include "Server.h"
-#include "Client.h"
 
 #include <opencv2/opencv.hpp>
 

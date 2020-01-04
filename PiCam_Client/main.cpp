@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
 		} catch (const cv::Exception& e) {
 			printf("Recieved bad frame data... Displaying previous frame. \n");
 		}
-		
+
 		imshow(im_name, recieve_frame);
 
 		waitKey(5);

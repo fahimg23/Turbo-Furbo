@@ -1,5 +1,5 @@
 CXX  = g++
-CXXFLAGS = -Wall -g -pthread
+CXXFLAGS = -Wall -g -pthread -I../Client -I../Server
 CVFLAGS = `pkg-config --cflags --libs opencv4`
 
 #CXXFLAGS: -Wall generates warnings, -g turns on debugging (clearer output)
@@ -11,14 +11,10 @@ CVFLAGS = `pkg-config --cflags --libs opencv4`
 # Line 1: dependencies for each target
 # Line 2: target generation
 
-main: main.o Server.o Client.o
-	$(CXX) $(CXXFLAGS) -o main main.o Server.o Client.o $(CVFLAGS)
+clidir = ../Client
+servdir = ../Server
+main: main.o $(servdir)/Server.o $(clidir)/Client.o
+	$(CXX) $(CXXFLAGS) -o main main.o $(servdir)/Server.o $(clidir)/Client.o $(CVFLAGS)
 
-main.o: main.cpp Server.h Client.h
+main.o: main.cpp $(servdir)/Server.h $(clidir)/Client.h
 	$(CXX) $(CXXFLAGS) -c main.cpp $(CVFLAGS)
-
-Server.o: Server.cpp Server.h
-	$(CXX) $(CXXFLAGS) -c Server.cpp
-
-Client.o: Client.cpp Server.h Client.h
-		$(CXX) $(CXXFLAGS) -c Client.cpp

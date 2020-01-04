@@ -1,5 +1,5 @@
 CXX  = g++
-CXXFLAGS = -Wall -g -pthread
+CXXFLAGS = -Wall -g -pthread -I../Server
 PIGFLAGS = -lpigpio -lpigpiod_if2 -lrt
 CVFLAGS = `pkg-config --cflags --libs opencv4`
 
@@ -12,14 +12,9 @@ CVFLAGS = `pkg-config --cflags --libs opencv4`
 # Line 1: dependencies for each target
 # Line 2: target generation
 
-main: main.o Server.o Client.o
-	$(CXX) $(CXXFLAGS) -o main main.o Server.o Client.o $(PIGFLAGS) $(CVFLAGS)
+servdir = ../Server
+main: main.o $(servdir)/Server.o
+	$(CXX) $(CXXFLAGS) -o main main.o $(servdir)/Server.o $(PIGFLAGS) $(CVFLAGS)
 
-main.o: main.cpp Server.h Client.h
+main.o: main.cpp $(servdir)/Server.h
 	$(CXX) $(CXXFLAGS) -c main.cpp $(PIGFLAGS) $(CVFLAGS)
-
-Server.o: Server.cpp Server.h
-	$(CXX) $(CXXFLAGS) -c Server.cpp
-
-Client.o: Client.cpp Server.h Client.h
-		$(CXX) $(CXXFLAGS) -c Client.cpp
