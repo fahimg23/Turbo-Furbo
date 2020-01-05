@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
 			printf("%s\n", pi_ip);
 
 			// Initialize server for camera
-			Server pi_serv_cam(camera_port, pi_ip);
+			Server pi_serv_cam(camera_port);
 
 			pi_serv_cam.initialize();
 
