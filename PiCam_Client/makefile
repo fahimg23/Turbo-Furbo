@@ -1,5 +1,6 @@
 CXX  = g++
-CXXFLAGS = -Wall -g -pthread -I../Client -I../Server
+CXXFLAGS = -Wall -g -pthread -I../Client_Server
+PIGFLAGS = -lpigpio -lpigpiod_if2 -lrt
 CVFLAGS = `pkg-config --cflags --libs opencv4`
 
 #CXXFLAGS: -Wall generates warnings, -g turns on debugging (clearer output)
@@ -11,10 +12,16 @@ CVFLAGS = `pkg-config --cflags --libs opencv4`
 # Line 1: dependencies for each target
 # Line 2: target generation
 
-clidir = ../Client
-servdir = ../Server
-main: main.o $(servdir)/Server.o $(clidir)/Client.o
-	$(CXX) $(CXXFLAGS) -o main main.o $(servdir)/Server.o $(clidir)/Client.o $(CVFLAGS)
+socketdir = ../Client_Server
 
-main.o: main.cpp $(servdir)/Server.h $(clidir)/Client.h
-	$(CXX) $(CXXFLAGS) -c main.cpp $(CVFLAGS)
+main: main.o Server.o Client.o
+	$(CXX) $(CXXFLAGS) -o main main.o Server.o Client.o $(PIGFLAGS) $(CVFLAGS)
+
+main.o: main.cpp $(socketdir)/Server.h $(socketdir)/Client.h
+	$(CXX) $(CXXFLAGS) -c main.cpp $(PIGFLAGS) $(CVFLAGS)
+
+Server.o: $(socketdir)/Server.cpp $(socketdir)/Server.h
+	$(CXX) $(CXXFLAGS) -c $(socketdir)/Server.cpp
+
+Client.o: $(socketdir)/Client.cpp $(socketdir)/Server.h $(socketdir)/Client.h
+		$(CXX) $(CXXFLAGS) -c $(socketdir)/Client.cpp
