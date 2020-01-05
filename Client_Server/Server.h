@@ -7,7 +7,7 @@
 #include <netinet/in.h>
 
 #define IP_ADDR_LEN 14
-#define MAX_BUFFER 16384 // 2^16
+#define MAX_BUFFER 32768 // 2^16
 
 class Server
 {

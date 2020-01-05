@@ -64,7 +64,6 @@ int main(int argc, char* argv[])
   if(!cap.isOpened())
     printf("Error. Unable to open camera\n");
 
-	cap.set(CAP_PROP_FPS,15);
 	cap.set(CAP_PROP_FRAME_WIDTH,640);
 	cap.set(CAP_PROP_FRAME_HEIGHT,480);
 
