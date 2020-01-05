@@ -26,7 +26,7 @@ private:
 
 public:
   Server(unsigned short port_num,
-        const char* ip_addr = INADDR_ANY,
+        char const* ip_addr = INADDR_ANY,
         int conn_type = SOCK_STREAM,
         short domain = AF_INET);
 
@@ -34,7 +34,7 @@ public:
   void set_port_num(int port_num);
 
   void get_ip_addr(char* ip_addr);
-  void set_ip_addr(const char* ip_addr);
+  void set_ip_addr(char const* ip_addr);
 
   int get_conn_type(void);
   void set_conn_type(int conn_type);
@@ -49,7 +49,7 @@ public:
   int close_current_conn();
 
   int read_data(char* rdata);
-  int write_data(const char* wdata);
+  int write_data(char const* wdata);
 
   int terminate();
 };

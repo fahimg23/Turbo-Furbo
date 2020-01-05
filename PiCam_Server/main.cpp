@@ -76,10 +76,8 @@ int main(int argc, char* argv[])
 
 			gpioSetSignalFunc(SIGINT, sigintHandler);
 
-			printf("%s\n", pi_ip);
-
 			// Initialize server for camera
-			Server pi_serv_cam(camera_port);
+			Server pi_serv_cam(camera_port, pi_ip);
 
 			pi_serv_cam.initialize();
 

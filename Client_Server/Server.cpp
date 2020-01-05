@@ -14,7 +14,7 @@
 #include "Server.h"
 
 Server::Server(unsigned short port_num,
-                const char* ip_addr,
+                char const* ip_addr,
                 int conn_type,
                 short domain)
 {
@@ -33,7 +33,7 @@ void Server::get_ip_addr(char* ip_addr)
 {
   strcpy(ip_addr, this->ip_addr);
 }
-void Server::set_ip_addr(const char* ip_addr)
+void Server::set_ip_addr(char const * ip_addr)
 {
   strcpy(this->ip_addr, ip_addr);
 }
@@ -125,7 +125,7 @@ int Server::read_data(char* rdata)
 }
 
 /* Send data to client/server */
-int Server::write_data(const char* wdata)
+int Server::write_data(char const* wdata)
 {
   int status;
   int flags = 0;
