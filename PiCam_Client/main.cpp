@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 	namedWindow(im_name, WINDOW_AUTOSIZE);
 
 	while(run_status) {
-		pi_cli_cam.read_data_udp((char*)recieve_buf);
+		pi_cli_cam.read_data((char*)recieve_buf);
 
 		vector<uchar> im_dec_buf((uchar*)recieve_buf, (uchar*)recieve_buf + MAX_BUFFER);
 		Mat dec_frame(im_dec_buf);

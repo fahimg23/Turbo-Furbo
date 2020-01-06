@@ -60,6 +60,7 @@ int main(int argc, char* argv[])
   VideoCapture cap(0);
 	uchar buf[MAX_BUFFER];
 	vector<uchar> im_buf;
+	uchar recieve_buf[MAX_BUFFER];
 
   if(!cap.isOpened())
     printf("Error. Unable to open camera\n");
@@ -87,6 +88,8 @@ int main(int argc, char* argv[])
 
 			pi_serv_cam.initialize();
 
+			while(!pi_serv_cam.read_data((char*)recieve_buf))
+				continue;
 			//pi_serv_cam.listen_conn(3);
 
 			//pi_serv_cam.accept_conn();

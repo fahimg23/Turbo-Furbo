@@ -62,7 +62,7 @@ int Client::connect_serv(void)
 
   // if udp connection, need to alert server by sending a message
   if (Server::get_conn_type() == SOCK_DGRAM){
-    if(!write_data_udp("hello")){
+    if(!write_data("hello")){
       printf("Could not send first message to server.\n");
       return 0;
     }

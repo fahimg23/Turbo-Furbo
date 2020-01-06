@@ -138,7 +138,7 @@ int Server::write_data(char const* wdata)
     return 0;
   }
 
-  status = send(new_socket, wdata, MAX_BUFFER, flags);
+  status = send(new_socket, wdata, strlen(wdata), flags);
 
   if (status == -1)
   {
