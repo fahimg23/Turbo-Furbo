@@ -149,6 +149,61 @@ int Server::write_data(char const* wdata)
   return 1;
 }
 
+int Server::read_data_udp(char* rdata){
+  int num_bytes_read;
+  int total_bytes_recv;
+
+  char* read_buf = dbuf_read;
+
+  total_bytes_recv = 0;
+
+  num_bytes_read = recvfrom(server_fd, read_buf, MAX_BUFFER, 0, (struct sockaddr*)&cli_addr, (socklen_t*)&len_addr);
+  total_bytes_recv += num_bytes_read;
+
+  while(total_bytes_recv < MAX_BUFFER && num_bytes_read > 0) {
+    read_buf += num_bytes_read;
+    num_bytes_read = recvfrom(new_socket, read_buf, MAX_BUFFER, 0, (struct sockaddr*)&cli_addr, (socklen_t*)&len_addr);
+    total_bytes_recv += num_bytes_read;
+  }
+
+  if (num_bytes_read == -1)
+  {
+    printf("Error reading data from client.\n");
+    return 0;
+  }
+
+  for (int i = 0; i < MAX_BUFFER; i++)
+    rdata[i] = dbuf_read[i];
+
+  return 1;
+
+}
+
+/* Send data to client/server */
+int Server::write_data_udp(char const* wdata)
+{
+  int status;
+  int flags = 0;
+
+  //flags |= MSG_DONTWAIT;
+
+  if (strlen(wdata) >= MAX_BUFFER)
+  {
+    printf("Please limit to %i characters.\n", MAX_BUFFER);
+    return 0;
+  }
+
+  status = sendto(server_fd, wdata, MAX_BUFFER, flags, (const struct sockaddr*)&cli_addr, (socklen_t)len_addr);
+
+  if (status == -1)
+  {
+    printf("Error writing data to client.\n");
+    return 0;
+  }
+
+  return 1;
+}
+
 int Server::close_current_conn()
 {
   shutdown(new_socket, SHUT_RDWR);

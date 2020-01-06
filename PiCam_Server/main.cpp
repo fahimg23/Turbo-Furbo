@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
 			gpioSetSignalFunc(SIGINT, sigintHandler);
 
 			// Initialize server for camera
-			Server pi_serv_cam(camera_port, pi_ip);
+			Server pi_serv_cam(camera_port, pi_ip, SOCK_DGRAM);
 
 			pi_serv_cam.initialize();
 
@@ -87,9 +87,9 @@ int main(int argc, char* argv[])
 
 			pi_serv_cam.initialize();
 
-			pi_serv_cam.listen_conn(3);
+			//pi_serv_cam.listen_conn(3);
 
-			pi_serv_cam.accept_conn();
+			//pi_serv_cam.accept_conn();
 
 			cap >> frame;
 			imencode(im_ext, frame, im_buf);
@@ -106,7 +106,7 @@ int main(int argc, char* argv[])
 
 				printf("image vector size: %d\n", im_buf.size());
 
-				pi_serv_cam.write_data((char*)buf);
+				pi_serv_cam.write_data_udp((char*)buf);
 			}
 			terminate_gpio();
 			pi_serv_cam.terminate();

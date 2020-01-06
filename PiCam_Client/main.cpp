@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 
 	printf("%s\n", pi_ip);
 
-	Client pi_cli_cam(camera_port, pi_ip);
+	Client pi_cli_cam(camera_port, pi_ip, SOCK_DGRAM);
 
 	pi_cli_cam.initialize();
 
@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 	namedWindow(im_name, WINDOW_AUTOSIZE);
 
 	while(run_status) {
-		pi_cli_cam.read_data((char*)recieve_buf);
+		pi_cli_cam.read_data_udp((char*)recieve_buf);
 
 		vector<uchar> im_dec_buf((uchar*)recieve_buf, (uchar*)recieve_buf + MAX_BUFFER);
 		Mat dec_frame(im_dec_buf);
@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
 		try {
 			imdecode(dec_frame, 1, &recieve_frame);
 		} catch (const cv::Exception& e) {
-			printf("Recieved bad frame data... Displaying previous frame. \n");
+			printf("Received bad frame data... Displaying previous frame. \n");
 		}
 
 		imshow(im_name, recieve_frame);

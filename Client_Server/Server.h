@@ -15,6 +15,7 @@ class Server
 protected:
   int server_fd, new_socket;
   struct sockaddr_in addr; // will contain port and ip info --> socket address
+  struct sockaddr_in cli_addr;
   char dbuf_read[MAX_BUFFER]; // read data buffer
   size_t len_addr;
 
@@ -50,6 +51,9 @@ public:
 
   int read_data(char* rdata);
   int write_data(char const* wdata);
+
+  int read_data_udp(char* rdata);
+  int write_data_udp(char const* wdata);
 
   int terminate();
 };
