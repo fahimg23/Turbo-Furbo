@@ -52,8 +52,8 @@ public:
   int read_data(char* rdata);
   int write_data(char const* wdata);
 
-  int read_data_udp(char* rdata);
-  int write_data_udp(char const* wdata);
+  virtual int read_data_udp(char* rdata);
+  virtual int write_data_udp(char const* wdata);
 
   int terminate();
 };
