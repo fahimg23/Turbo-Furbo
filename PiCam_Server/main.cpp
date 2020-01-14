@@ -19,7 +19,7 @@
 using namespace cv;
 using namespace std;
 
-const char pi_ip[IP_ADDR_LEN] = "192.168.1.28"; // pi ip address
+const char pi_ip[IP_ADDR_LEN] = "192.168.1.164"; // pi ip address
 int camera_port = 65535;
 
 int pi;
