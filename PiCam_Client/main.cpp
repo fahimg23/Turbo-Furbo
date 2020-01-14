@@ -8,8 +8,11 @@
 
 #include <unistd.h>
 
+#include <chrono>
+
 #include "Server.h"
 #include "Client.h"
+#include "Camera_Client.h"
 
 #include <opencv2/opencv.hpp>
 
@@ -38,7 +41,7 @@ int main(int argc, char* argv[])
 
 	printf("%s\n", pi_ip);
 
-	Client pi_cli_cam(camera_port, pi_ip, SOCK_DGRAM);
+	Camera_Client pi_cli_cam(camera_port, pi_ip, SOCK_DGRAM);
 
 	pi_cli_cam.initialize();
 
@@ -50,8 +53,12 @@ int main(int argc, char* argv[])
 	namedWindow(im_name, WINDOW_AUTOSIZE);
 
 	while(run_status) {
-		pi_cli_cam.read_data((char*)recieve_buf);
 
+		stat = pi_cli_cam.read_frame((char*)recieve_buf);
+
+		if(!stat) // problem reading frame data
+			continue;
+			
 		vector<uchar> im_dec_buf((uchar*)recieve_buf, (uchar*)recieve_buf + MAX_BUFFER);
 		Mat dec_frame(im_dec_buf);
 

@@ -13,6 +13,12 @@ class Server
 {
 /* These fields are only for use by class internally */
 protected:
+  /*
+  * server_fd is a file descriptor for a created socket
+  * new_socket (for TCP) is a socket in a connected state
+  * new_socket (for UDP) is the same as server_fd, but if connect() is called,
+  * then the socket will only listen for data from the address specified in connect()
+  */
   int server_fd, new_socket;
   struct sockaddr_in addr; // will contain port and ip info --> socket address
   struct sockaddr_in cli_addr;
@@ -49,11 +55,8 @@ public:
   int accept_conn(void);
   int close_current_conn();
 
-  int read_data(char* rdata);
-  int write_data(char const* wdata);
-
-  virtual int read_data_udp(char* rdata);
-  virtual int write_data_udp(char const* wdata);
+  virtual int read_data(char* rdata, int& num_bytes_read);
+  virtual int write_data(char const* wdata);
 
   int terminate();
 };

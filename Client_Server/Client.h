@@ -20,6 +20,6 @@ public:
   int initialize(void);
   int connect_serv(void);
 
-  int read_data_udp(char* rdata);
-  int write_data_udp(char const* wdata);
+  int read_data(char* rdata, int& num_bytes_read);
+  int write_data(char const* wdata);
 };

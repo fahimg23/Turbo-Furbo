@@ -1,5 +1,5 @@
 CXX  = g++
-CXXFLAGS = -Wall -g -pthread -I../Client_Server
+CXXFLAGS = -std=c++11 -Wall -g -pthread -I../Client_Server
 PIGFLAGS = -lpigpio -lpigpiod_if2 -lrt
 CVFLAGS = `pkg-config --cflags --libs opencv4`
 
@@ -14,8 +14,8 @@ CVFLAGS = `pkg-config --cflags --libs opencv4`
 
 socketdir = ../Client_Server
 
-main: main.o Server.o Client.o
-	$(CXX) $(CXXFLAGS) -o main main.o Server.o Client.o $(PIGFLAGS) $(CVFLAGS)
+main: main.o Server.o Client.o Camera_Client.o
+	$(CXX) $(CXXFLAGS) -o main main.o Server.o Client.o Camera_Client.o $(PIGFLAGS) $(CVFLAGS)
 
 main.o: main.cpp $(socketdir)/Server.h $(socketdir)/Client.h
 	$(CXX) $(CXXFLAGS) -c main.cpp $(PIGFLAGS) $(CVFLAGS)
@@ -25,3 +25,6 @@ Server.o: $(socketdir)/Server.cpp $(socketdir)/Server.h
 
 Client.o: $(socketdir)/Client.cpp $(socketdir)/Server.h $(socketdir)/Client.h
 		$(CXX) $(CXXFLAGS) -c $(socketdir)/Client.cpp
+
+Camera_Client.o: $(socketdir)/Camera_Client.cpp $(socketdir)/Server.h $(socketdir)/Client.h $(socketdir)/Camera_Client.h
+		$(CXX) $(CXXFLAGS) -c $(socketdir)/Camera_Client.cpp

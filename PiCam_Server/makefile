@@ -14,14 +14,14 @@ CVFLAGS = `pkg-config --cflags --libs opencv4`
 
 socketdir = ../Client_Server
 
-main: main.o Server.o Client.o
-	$(CXX) $(CXXFLAGS) -o main main.o Server.o Client.o $(PIGFLAGS) $(CVFLAGS)
+main: main.o Server.o Camera_Server.o
+	$(CXX) $(CXXFLAGS) -o main main.o Server.o Camera_Server.o $(PIGFLAGS) $(CVFLAGS)
 
-main.o: main.cpp $(socketdir)/Server.h $(socketdir)/Client.h
+main.o: main.cpp $(socketdir)/Server.h $(socketdir)/Camera_Server.h 
 	$(CXX) $(CXXFLAGS) -c main.cpp $(PIGFLAGS) $(CVFLAGS)
 
 Server.o: $(socketdir)/Server.cpp $(socketdir)/Server.h
 	$(CXX) $(CXXFLAGS) -c $(socketdir)/Server.cpp
 
-Client.o: $(socketdir)/Client.cpp $(socketdir)/Server.h $(socketdir)/Client.h
-		$(CXX) $(CXXFLAGS) -c $(socketdir)/Client.cpp
+Camera_Server.o: $(socketdir)/Camera_Server.cpp $(socketdir)/Server.h $(socketdir)/Camera_Server.h
+	$(CXX) $(CXXFLAGS) -c $(socketdir)/Camera_Server.cpp

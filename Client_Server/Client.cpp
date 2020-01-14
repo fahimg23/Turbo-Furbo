@@ -14,6 +14,8 @@
 #include "Server.h"
 #include "Client.h"
 
+using namespace std;
+
 Client::Client(unsigned short port_num,
                 const char* serv_ip_addr,
                 int conn_type,
@@ -60,9 +62,11 @@ int Client::connect_serv(void)
     return 0;
   }
 
+  char data[MAX_BUFFER];
+  memset(data, 'h', MAX_BUFFER*sizeof(char));
   // if udp connection, need to alert server by sending a message
   if (Server::get_conn_type() == SOCK_DGRAM){
-    if(!write_data("hello")){
+    if(!write_data((char const*)data)){
       printf("Could not send first message to server.\n");
       return 0;
     }
@@ -70,23 +74,15 @@ int Client::connect_serv(void)
   return 1;
 }
 
-
-int Client::read_data_udp(char* rdata){
-  int num_bytes_read;
-  int total_bytes_recv;
-
+/* Read data sent from client/server */
+int Client::read_data(char* rdata, int& num_bytes_read)
+{
   char* read_buf = dbuf_read;
 
-  total_bytes_recv = 0;
-
-  num_bytes_read = recvfrom(new_socket, read_buf, MAX_BUFFER, 0, (struct sockaddr*)&cli_addr, (socklen_t*)&len_addr);
-  total_bytes_recv += num_bytes_read;
-
-  while(total_bytes_recv < MAX_BUFFER && num_bytes_read > 0) {
-    read_buf += num_bytes_read;
+  if(get_conn_type() == SOCK_DGRAM) // UDP
     num_bytes_read = recvfrom(new_socket, read_buf, MAX_BUFFER, 0, (struct sockaddr*)&cli_addr, (socklen_t*)&len_addr);
-    total_bytes_recv += num_bytes_read;
-  }
+  else // conn_type == SOCK_STREAM (TCP)
+    num_bytes_read = recv(new_socket, read_buf, MAX_BUFFER, 0);
 
   if (num_bytes_read == -1)
   {
@@ -98,24 +94,26 @@ int Client::read_data_udp(char* rdata){
     rdata[i] = dbuf_read[i];
 
   return 1;
-
 }
 
-
-int Client::write_data_udp(char const* wdata)
+/* Send data to client/server */
+int Client::write_data(char const* wdata)
 {
   int status;
   int flags = 0;
 
   //flags |= MSG_DONTWAIT;
 
-  if (strlen(wdata) >= MAX_BUFFER)
+  if (strlen(wdata) > MAX_BUFFER)
   {
     printf("Please limit to %i characters.\n", MAX_BUFFER);
     return 0;
   }
 
-  status = sendto(new_socket, wdata, MAX_BUFFER, flags, (const struct sockaddr*)&serv_addr, (socklen_t)len_addr);
+  if(get_conn_type() == SOCK_DGRAM) // UDP
+    status = sendto(new_socket, wdata, MAX_BUFFER, flags, (const struct sockaddr*)&cli_addr, (socklen_t)len_addr);
+  else // conn_type == SOCK_STREAM (TCP)
+    status = send(new_socket, wdata, strlen(wdata), flags);
 
   if (status == -1)
   {
